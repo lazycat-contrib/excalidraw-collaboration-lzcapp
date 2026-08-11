@@ -1,0 +1,41 @@
+application:
+  subdomain: excalidraw-collaboration
+  upstreams:
+    - location: /storage/
+      backend: http://storage:8081/
+    - location: /socket.io/
+      backend: http://room:80/
+      disable_trim_location: true
+      fix_websocket_header: true
+    - location: /
+      backend: http://frontend:80/
+  public_path:
+    - /
+
+services:
+  frontend:
+    image: docker.1ms.run/alswl/excalidraw:v0.18.1-fork-b2
+    environment:
+      - "VITE_APP_BACKEND_V2_GET_URL=https://{{ .S.AppDomain }}/storage/api/v2/scenes/"
+      - "VITE_APP_BACKEND_V2_POST_URL=https://{{ .S.AppDomain }}/storage/api/v2/scenes/"
+      - "VITE_APP_WS_SERVER_URL=https://{{ .S.AppDomain }}"
+      - "VITE_APP_FIREBASE_CONFIG={}"
+      - "VITE_APP_HTTP_STORAGE_BACKEND_URL=https://{{ .S.AppDomain }}/storage/api/v2"
+      - "VITE_APP_STORAGE_BACKEND=http"
+      - "VITE_APP_DISABLE_TRACKING=true"
+      - "PUBLIC_URL=https://{{ .S.AppDomain }}"
+
+  storage:
+    image: docker.1ms.run/alswl/excalidraw-storage-backend:v2023.11.11
+    environment:
+      - "PORT=8081"
+      - "STORAGE_URI=sqlite:///data/excalidraw.sqlite"
+    binds:
+      - /lzcapp/var/storage:/data
+
+  room:
+    image: docker.1ms.run/alswl/excalidraw-room-go:v0.1.0
+    environment:
+      - "PORT=80"
+
+usage: "打开应用即可创建白板；使用“实时协作”生成房间链接并邀请其他参与者。"

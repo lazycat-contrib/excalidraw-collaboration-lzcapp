@@ -1,0 +1,20 @@
+package: community.lazycat.app.excalidraw-collaboration
+version: 0.18.1
+name: Excalidraw Collaboration
+description: "支持场景存储与实时多人协作的 Excalidraw 白板"
+min_os_version: 1.5.0
+homepage: https://github.com/alswl/excalidraw-collaboration
+author: alswl
+license: MIT
+
+locales:
+  zh:
+    name: Excalidraw 协作白板
+    description: "支持场景存储与实时多人协作的 Excalidraw 白板"
+  en:
+    name: Excalidraw Collaboration
+    description: "A self-hosted Excalidraw whiteboard with scene storage and real-time collaboration"
+
+permissions:
+  required:
+    - net.internet
